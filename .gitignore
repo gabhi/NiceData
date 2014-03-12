@@ -1,3 +1,5 @@
 Scarecrow.sublime-project
 Scarecrow.sublime-workspace
 *.pyc
+*.png
+/charts

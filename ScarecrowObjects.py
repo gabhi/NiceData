@@ -1,5 +1,6 @@
 from matplotlib import pyplot
 from matplotlib.dates import DateFormatter
+from mpltools import style
 import csv, urllib
 from datetime import date,datetime, timedelta
 class ObservationSeries:
@@ -61,6 +62,7 @@ class ObservationSeries:
 		returnList=[observation.getAttributeByName(nameOfAttr) for observation in self.dataSet]
 		return returnList
 	def plotSeries(self,param0="date",param1="close"): #plot using pyplot
+		style.use('ggplot') #using mpltools to make nice plots
 		if len(self.dataSet)==0 and param1!="date": #Check to see if there is anything to plot and that y axis is NOT date
 			return -1
 		#otherwise plot the chosen parameter against time
@@ -71,12 +73,12 @@ class ObservationSeries:
 		#convert to all floats
 		yArray = map(float,yArray)
 		#print yArray
-		xRangeString = " from "+param0+"s "+xArray[0].strftime("%m-%Y")+" to "+ xArray[len(xArray)-1].strftime("%m-%Y")
+		xRangeString = " from " + param0.capitalize() + "s " + xArray[0].strftime("%m-%Y")+" to "+ xArray[len(xArray)-1].strftime("%m-%Y")
 
 		displayFig=pyplot.figure(figsize=(12,8))
-		displayFig.canvas.set_window_title(self.getObservation(0).getAttributeByName("ticker")+": "+param0+" vs. "+param1)
-		subPlot=displayFig.add_subplot(111,xlabel=param0,ylabel=param1,title=self.getObservation(0).getAttributeByName("ticker")+": "+param0+" vs. "+param1+xRangeString)
-		subPlot.grid(True)
+		displayFig.canvas.set_window_title(self.getObservation(0).getAttributeByName("ticker")+": "+param0.capitalize()+" vs. "+param1.capitalize())
+		subPlot=displayFig.add_subplot(111,xlabel=param0.capitalize(),ylabel=param1.capitalize(),title=self.getObservation(0).getAttributeByName("ticker")+": " + param0.capitalize() + " vs. " + param1.capitalize() + xRangeString)
+		subPlot.grid(False)
 		#Some statistics to calculate range extension
 		dateMin=date(xArray[0].year,xArray[0].month,1)
 		dateMax=date(xArray[len(xArray)-1].year,xArray[len(xArray)-1].month,31)
@@ -84,11 +86,18 @@ class ObservationSeries:
 		#print "EXTENSIONY:",extensionY
 		subPlot.set_xlim(dateMin,dateMax)
 		subPlot.set_ylim(float(min(yArray))-extensionY,float(max(yArray))+extensionY)
+		
 		if param0=="date":
-			subPlot.plot_date(xArray,yArray)
+			#Give the user a choice of line style in the future
+			subPlot.plot_date(xArray,yArray,'-')
 			subPlot.xaxis.set_major_formatter(DateFormatter("%m-%Y")) #Sets format of x axis
-
-		pyplot.show()
+		#Used to show plot
+		savefigure = pyplot.gcf()
+		pyplot.show() 
+		#Used to save plot
+		#pathForChart = "charts/" + date.today().strftime("%d-%m-%y") + "/" + self.getObservation(0).getAttributeByName("ticker") + "/" + param0 + "vs" + param1 + "_" + xArray[0].strftime("%m-%Y") + "_" + xArray[len(xArray)-1].strftime("%m-%Y") + ".png"
+		pathForChart = "generatedImg.png"
+		savefigure.savefig(pathForChart, bbox_inches='tight')
 
 
 

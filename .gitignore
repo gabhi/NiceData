@@ -3,3 +3,4 @@ Scarecrow.sublime-workspace
 *.pyc
 *.png
 /charts
+settings.py

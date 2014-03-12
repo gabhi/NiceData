@@ -1,24 +1,52 @@
 from matplotlib import pyplot
 from matplotlib.dates import DateFormatter
-from datetime import datetime, timedelta
+import csv, urllib
+from datetime import date,datetime, timedelta
 class ObservationSeries:
+
 	def __init__(self,tempArray=[]):
-		print "Initialized a Set"
 		self.dataSet = tempArray
+	
+	#Returns an observation series of Observation data points. Essentially loads the series.
+	def fetchDataSeries(self,ticker=None,startDate=date(2009,1,1),endDate=date(2009,10,1), interval="d"):
+		#clear data set
+		self.dataSet = [];
+		#We check to see if data is not already stored here. If not, we pull from Yahoo
+		if(ticker == None):
+			print "ERROR: NO TICKER SPECIFIED"
+			return None
+		#Construct URL
+		base="http://ichart.yahoo.com/table.csv?s="
+		fromDateString="&a="+str(startDate.month-1)+"&b="+str(startDate.day)+"&c="+str(startDate.year)
+		toDateString="&d="+str(endDate.month-1)+"&e="+str(endDate.day)+"&f="+str(endDate.year)
+		intervalString="&g="+interval
+		staticString="&ignore=.csv"
+		endUrl=base+ticker+fromDateString+toDateString+intervalString+staticString
+
+		newData=urllib.urlopen(endUrl).readlines()
+		newData.reverse() #Want earliest data first
+		for lineNum in xrange(0,len(newData)-1):
+			ds,open_,high,low,close,volume,adjclose=newData[lineNum].rstrip().split(',')
+			tempDate=datetime.strptime(ds,"%Y-%m-%d").date()
+			#print tempDate
+			self.addObservation(Observation(inDate=tempDate,inTicker=ticker,inOpen=float(open_),inHigh=float(high),inLow=float(low),inClose=float(close),inVol=float(volume),inAdjClose=float(adjclose)))
+
 	def addObservation(self,inObservation):
 		self.dataSet.append(inObservation)
+
 	def getObservation(self,indice):
 		return self.dataSet[indice]
+	def getObservations(self,startIndex,endIndex):
+		return self.dataSet[startIndex:endIndex]
 	def getMinimumDateInSet(self):
 		return self.dataSet[0].date
-
-	#returns the index value of the dateTime object inDate
+	#returns the index value of the date object inDate.
+	#Since we have ordered data, this will be replaced with an O(1) function in the future
 	def getIndiceOfDate(self,inDate):
 		returnIndice = -1
 		count = 0
 		for observation in self.dataSet:
 			if observation.date == inDate:
-				print "DATE MATCH"
 				returnIndice = count
 			count = count + 1
 		return returnIndice
@@ -28,14 +56,6 @@ class ObservationSeries:
 		return (self.getMinimumDateInSet() < beginDateRange) and (self.getMaximumDateInSet() > endDateRange)
 	def getSize(self):
 		return len(self.dataSet)
-
-	#Gets the ratio of the price at startDate to that of the price n observations earlier
-	def getROC(self,n,startDate):
-		endIndice=self.getIndiceOfDate(startDate)
-		startIndice=endIndice-int(n)
-		if startIndice < 0:
-			return -1
-		return float(self.dataSet[endIndice].closePrice)/self.dataSet[startIndice].closePrice
 
 	def getSeriesByAttribute(self,nameOfAttr):
 		returnList=[observation.getAttributeByName(nameOfAttr) for observation in self.dataSet]
@@ -50,7 +70,7 @@ class ObservationSeries:
 		yArray = self.getSeriesByAttribute(param1)
 		#convert to all floats
 		yArray = map(float,yArray)
-		print yArray
+		#print yArray
 		xRangeString = " from "+param0+"s "+xArray[0].strftime("%m-%Y")+" to "+ xArray[len(xArray)-1].strftime("%m-%Y")
 
 		displayFig=pyplot.figure(figsize=(12,8))
@@ -58,10 +78,10 @@ class ObservationSeries:
 		subPlot=displayFig.add_subplot(111,xlabel=param0,ylabel=param1,title=self.getObservation(0).getAttributeByName("ticker")+": "+param0+" vs. "+param1+xRangeString)
 		subPlot.grid(True)
 		#Some statistics to calculate range extension
-		dateMin=datetime(xArray[0].year,xArray[0].month,1)
-		dateMax=datetime(xArray[len(xArray)-1].year,xArray[len(xArray)-1].month,31)
+		dateMin=date(xArray[0].year,xArray[0].month,1)
+		dateMax=date(xArray[len(xArray)-1].year,xArray[len(xArray)-1].month,31)
 		extensionY=(max(yArray)-min(yArray))*.1
-		print "EXTENSIONY:",extensionY
+		#print "EXTENSIONY:",extensionY
 		subPlot.set_xlim(dateMin,dateMax)
 		subPlot.set_ylim(float(min(yArray))-extensionY,float(max(yArray))+extensionY)
 		if param0=="date":
@@ -69,28 +89,12 @@ class ObservationSeries:
 			subPlot.xaxis.set_major_formatter(DateFormatter("%m-%Y")) #Sets format of x axis
 
 		pyplot.show()
-	def getMovingAvg(self,startDate,timeRange=50.0): #range is currently only implemented in # of observaitons
-		endIndice=self.getIndiceOfDate(startDate)
-		print "END INDICE: "+str(endIndice)
-		print "START DATE FROM END INDICE: "+str(self.dataSet[endIndice].date)
-		startIndice = endIndice-int(timeRange)
-		print "START INDICE: "+str(startIndice)
-		if startIndice<0:
-			print "Date range is not in set"
-			return -1
-		print "Date and range valid - calculating moving avg"
-		avg = 0
-		for observation in self.dataSet[endIndice-int(timeRange):endIndice]:
-			avg = avg + observation.closePrice
-			#print "SUM NOW: "+str(avg)
-		avg = avg/timeRange
-		return avg
-		#for closePrice in self.dataSet[len(,:]
+
 
 
 class Observation:
 	def __init__(self,inDate="N/A",inTicker="N/A",inOpen=-1,inHigh=-1,inLow=-1,inClose=-1,inVol=-1,inAdjClose=-1):
-		self.date=inDate #a datetime object
+		self.date=inDate #a date object
 		self.ticker = inTicker
 		self.openPrice=inOpen
 		self.highPrice=inHigh

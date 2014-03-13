@@ -9,4 +9,8 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
     url(r'^$', 'ScarecrowApp.views.index',name='index'),
     url(r'^admin/', include(admin.site.urls)),
+
+    #Return the dynamically created image
+    #URL FORM: server.com/seriesid/result.png
+    url(r'^(?P<figure_id>\d+)/figure.png$', 'ScarecrowApp.views.getFigureImage',name='getFigureImage'),
 )

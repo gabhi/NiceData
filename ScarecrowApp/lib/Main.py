@@ -1,5 +1,5 @@
 from datetime import timedelta, date
-from ScarecrowObjects import Observation,ObservationSeries
+from ScarecrowObjects import ObservationSeries
 #Contains
 class Scarecrow:
 	def __init__(self,tickerIn=None,startIn=None,endIn=None,intervalIn=None):

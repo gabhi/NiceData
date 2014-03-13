@@ -3,6 +3,8 @@ from matplotlib.dates import DateFormatter
 from mpltools import style
 import csv, urllib
 from datetime import date,datetime, timedelta
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
 class ObservationSeries:
 
 	def __init__(self,tempArray=[]):
@@ -93,11 +95,17 @@ class ObservationSeries:
 			subPlot.xaxis.set_major_formatter(DateFormatter("%m-%Y")) #Sets format of x axis
 		#Used to show plot
 		savefigure = pyplot.gcf()
-		pyplot.show() 
+		#pyplot.show() 
+		# uncoment above to show plot on gui
 		#Used to save plot
 		#pathForChart = "charts/" + date.today().strftime("%d-%m-%y") + "/" + self.getObservation(0).getAttributeByName("ticker") + "/" + param0 + "vs" + param1 + "_" + xArray[0].strftime("%m-%Y") + "_" + xArray[len(xArray)-1].strftime("%m-%Y") + ".png"
-		pathForChart = "generatedImg.png"
-		savefigure.savefig(pathForChart, bbox_inches='tight')
+		#We won't save the figure now
+		#pathForChart = "tempImg.png"
+		#savefigure.savefig(pathForChart, bbox_inches='tight')
+		
+		#NEW FOR DJANGO - return the canvas instead
+		canvas = FigureCanvas(savefigure)
+		return canvas
 
 
 

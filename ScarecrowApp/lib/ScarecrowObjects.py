@@ -5,6 +5,8 @@ import csv, urllib
 from datetime import date,datetime, timedelta
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
+import cStringIO
+
 class ObservationSeries:
 
 	def __init__(self,tempArray=[]):
@@ -77,7 +79,7 @@ class ObservationSeries:
 		#print yArray
 		xRangeString = " from " + param0.capitalize() + "s " + xArray[0].strftime("%m-%Y")+" to "+ xArray[len(xArray)-1].strftime("%m-%Y")
 
-		displayFig=pyplot.figure(figsize=(12,8))
+		displayFig=pyplot.figure(figsize=(10,6.67)) #12,8
 		displayFig.canvas.set_window_title(self.getObservation(0).getAttributeByName("ticker")+": "+param0.capitalize()+" vs. "+param1.capitalize())
 		subPlot=displayFig.add_subplot(111,xlabel=param0.capitalize(),ylabel=param1.capitalize(),title=self.getObservation(0).getAttributeByName("ticker")+": " + param0.capitalize() + " vs. " + param1.capitalize() + xRangeString)
 		subPlot.grid(False)
@@ -106,6 +108,54 @@ class ObservationSeries:
 		#NEW FOR DJANGO - return the canvas instead
 		canvas = FigureCanvas(savefigure)
 		return canvas
+
+	#Returns a cstring encoded image
+	def plotSeriesCString(self,param0="date",param1="close"): #plot using pyplot
+		style.use('ggplot') #using mpltools to make nice plots
+		if len(self.dataSet)==0 and param1!="date": #Check to see if there is anything to plot and that y axis is NOT date
+			return -1
+		#otherwise plot the chosen parameter against time
+		xArray=[]
+		yArray=[]
+		xArray = self.getSeriesByAttribute(param0)
+		yArray = self.getSeriesByAttribute(param1)
+		#convert to all floats
+		yArray = map(float,yArray)
+		#print yArray
+		xRangeString = " from " + param0.capitalize() + "s " + xArray[0].strftime("%m-%Y")+" to "+ xArray[len(xArray)-1].strftime("%m-%Y")
+
+		displayFig=pyplot.figure(figsize=(10,6.67)) #12,8
+		displayFig.canvas.set_window_title(self.getObservation(0).getAttributeByName("ticker")+": "+param0.capitalize()+" vs. "+param1.capitalize())
+		subPlot=displayFig.add_subplot(111,xlabel=param0.capitalize(),ylabel=param1.capitalize(),title=self.getObservation(0).getAttributeByName("ticker")+": " + param0.capitalize() + " vs. " + param1.capitalize() + xRangeString)
+		subPlot.grid(False)
+		#Some statistics to calculate range extension
+		dateMin=date(xArray[0].year,xArray[0].month,1)
+		dateMax=date(xArray[len(xArray)-1].year,xArray[len(xArray)-1].month,31)
+		extensionY=(max(yArray)-min(yArray))*.1
+		#print "EXTENSIONY:",extensionY
+		subPlot.set_xlim(dateMin,dateMax)
+		subPlot.set_ylim(float(min(yArray))-extensionY,float(max(yArray))+extensionY)
+		
+		if param0=="date":
+			#Give the user a choice of line style in the future
+			subPlot.plot_date(xArray,yArray,'-')
+			subPlot.xaxis.set_major_formatter(DateFormatter("%m-%Y")) #Sets format of x axis
+		#Used to show plot
+		#savefigure = pyplot.gcf()
+		#pyplot.show() 
+		# uncoment above to show plot on gui
+		#Used to save plot
+		#pathForChart = "charts/" + date.today().strftime("%d-%m-%y") + "/" + self.getObservation(0).getAttributeByName("ticker") + "/" + param0 + "vs" + param1 + "_" + xArray[0].strftime("%m-%Y") + "_" + xArray[len(xArray)-1].strftime("%m-%Y") + ".png"
+		#We won't save the figure now
+		#pathForChart = "tempImg.png"
+		#savefigure.savefig(pathForChart, bbox_inches='tight')
+		#canvas = FigureCanvas(savefigure)
+
+		#New for AJAX - return c string representation
+		sio = cStringIO.StringIO()
+		pyplot.savefig(sio,format='PNG')
+		encoded_img = sio.getvalue().encode('Base64')
+		return encoded_img
 
 
 

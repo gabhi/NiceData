@@ -13,4 +13,9 @@ urlpatterns = patterns('',
     #Return the dynamically created image
     #URL FORM: server.com/seriesid/result.png
     url(r'^(?P<figure_id>\d+)/figure.png$', 'ScarecrowApp.views.getFigureImage',name='getFigureImage'),
+
+    #URL to serve created image on same page
+    url(r'^generate-image/', 'ScarecrowApp.views.generate_image',name='generateImage'),
+
 )
+	

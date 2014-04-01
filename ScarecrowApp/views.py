@@ -2,14 +2,16 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import RequestContext
 
-from ScarecrowApp.lib.ScarecrowObjects import ObservationSeries
 from ScarecrowApp.lib.Main import Scarecrow
 from ScarecrowApp.models import GeneratedFigure
-from datetime import datetime,date
-# Create your views here.
+from datetime import date
+
+from django.views.generic import FormView
+from ScarecrowApp.forms import ControlPanel
+
 def index(request):
 	context = ({'Context': 'Hi!'})
-	return render(request,'index.html',context)
+	return render(request,'index.html',{'form': ControlPanel()})
 
 def getFigureImage(request,figure_id): #figure id after creating a generatedfigure object
 	fig = GeneratedFigure.objects.get(id=figure_id)

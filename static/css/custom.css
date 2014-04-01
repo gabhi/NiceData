@@ -1,5 +1,7 @@
+
 $defaultBackgroundColor: #3A75C4;
 $defaultHighlightColor: #c0392b;
+
 
 .navbar{
 	width:100%;
@@ -86,7 +88,16 @@ $defaultHighlightColor: #c0392b;
 	color: #FFFFFF;
 	font-size: 10px;
 }
+.imageFrame{
+	height:610px;
+	display: table-cell;    
+	vertical-align: middle;
+	font-family: 'Just Another Hand', cursive;
+
+}
 .imageFrame img{
 	width:100%;
 	height:550px;
+
 }
+

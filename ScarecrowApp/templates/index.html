@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Generate pretty financial figures.">
@@ -15,6 +16,9 @@
     <!-- Custom stylesheet I built for Scarecrow. Remove the timestamp parameter in
     final build -->
     <link href="{{STATIC_URL}}css/custom.css?{% now "U" %}" rel="stylesheet">
+    <!-- Custom fonts from Google fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Just+Another+Hand' rel='stylesheet' type='text/css'>
+
     <style>
     body {
         margin-top: 28px;
@@ -25,6 +29,8 @@
 </head>
 
 <body>
+    <!--Custom fonts -->
+
     <!-- custom navbar -->
     <nav class="navbar navbar-scarecrowCustom navbar-fixed-top" role="navigation">
         <div class="container-fluid">
@@ -63,17 +69,17 @@
         <div class="row-fluid">
             <section id="use">
             <div class="row-fluid">
-                <div class="col-md-8 imageFrame" style="background-color:#FFFFFF; height:650px">
+                <div class="col-md-8 imageFrame" style="background-color:#FFFFFF;">
                 <!-- If no image requested, display a stock image and nice text -->
-
-                    <center> 
-                        <div id="ShowImage"></div>
-                        <div id="NoImageText">Select a company in the righthand toolbar.</div>
-                    </center> 
+                        <center>
+                        <div id="ShowImage" class="imageFrame"></div>
+                        <div id="NoImageText" class="imageFrame"><h1 class="customText">
+                            Please select a company in the righthand toolbar &rarr;
+                        </h1></div></center>
                 </div>
                 <div class="col-md-4">
-                    <center> <h1> Use Scarecrow </h1>
-                    <form method="POST" action="/generate-image/" id="GenImgForm">
+                    <center> <h3> Use Scarecrow </h3>
+                    <form method="POST" action="/generate-image/" id="GenImgForm" class="well" style="height:610px">
                         {% csrf_token %}
                         Ticker: <input type="text" name="ticker" id="ticker" />
                         <p>Will insert date slider here.<p>

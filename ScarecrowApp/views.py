@@ -4,13 +4,18 @@ from django.template import RequestContext
 
 from ScarecrowApp.lib.Main import Scarecrow
 from ScarecrowApp.models import GeneratedFigure
-from datetime import date
+from datetime import date,datetime
+import logging
+logger = logging.getLogger(__name__)
+
 
 from django.views.generic import FormView
 from ScarecrowApp.forms import ControlPanel
 
 def index(request):
 	context = ({'Context': 'Hi!'})
+        logger.debug("index rendered.")
+
 	return render(request,'index.html',{'form': ControlPanel()})
 
 def getFigureImage(request,figure_id): #figure id after creating a generatedfigure object
@@ -24,6 +29,7 @@ def getFigureImage(request,figure_id): #figure id after creating a generatedfigu
 	return response
 
 def generate_image(request):
+
     req_context = RequestContext(request,{'test':'lol',})
 
     if request.method == 'POST':
@@ -33,15 +39,18 @@ def generate_image(request):
         '''
         sio = cStringIO.StringIO() # use io.StringIO() in Python 3x
         pyplot.savefig(sio, format="PNG")
-
         encoded_img = sio.getvalue().encode('Base64') # On Python 3x, use base64.b64encode(sio.getvalue())
 
        # return HttpResponse('<img src="data:image/png;base64,%s" />' %encoded_img)
        '''
-        test_start = date(2009,1,1)
-        test_end = date(2009,5,5)
+        start_date=datetime.strptime(request.POST['start_date'],'%Y/%m/%d').date()
+        end_date=datetime.strptime(request.POST['end_date'],'%Y/%m/%d').date()
 
-        newScarecrow = Scarecrow(tickerIn=ticker,startIn=test_start,endIn=test_end,intervalIn='d')
+        
+        #start_date = date(2009,1,1)
+        #end_date = date(2009,5,5)
+
+        newScarecrow = Scarecrow(tickerIn=ticker,startIn=start_date,endIn=end_date,intervalIn='d')
         encoded_img = newScarecrow.currentSeries.plotSeriesCString()
 
         #return HttpResponse(ticker,req_context)

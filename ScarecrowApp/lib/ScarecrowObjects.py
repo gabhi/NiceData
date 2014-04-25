@@ -6,6 +6,9 @@ from datetime import date,datetime, timedelta
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 import cStringIO
+#debugging tools
+import logging
+logger = logging.getLogger(__name__)
 
 class ObservationSeries:
 
@@ -27,7 +30,7 @@ class ObservationSeries:
 		intervalString="&g="+interval
 		staticString="&ignore=.csv"
 		endUrl=base+ticker+fromDateString+toDateString+intervalString+staticString
-
+		logger.debug(endUrl)
 		newData=urllib.urlopen(endUrl).readlines()
 		newData.reverse() #Want earliest data first
 		for lineNum in xrange(0,len(newData)-1):

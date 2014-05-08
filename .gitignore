@@ -4,3 +4,4 @@ Scarecrow.sublime-workspace
 *.png
 /charts
 settings.py
+/Scarecrow/logfile

@@ -4,7 +4,7 @@ from mpltools import style
 import csv, urllib
 from datetime import date,datetime, timedelta
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-
+import calendar
 import cStringIO
 #debugging tools
 import logging
@@ -128,12 +128,15 @@ class ObservationSeries:
 		xRangeString = " from " + param0.capitalize() + "s " + xArray[0].strftime("%m-%Y")+" to "+ xArray[len(xArray)-1].strftime("%m-%Y")
 
 		displayFig=pyplot.figure(figsize=(10,6.67)) #12,8
-		displayFig.canvas.set_window_title(self.getObservation(0).getAttributeByName("ticker")+": "+param0.capitalize()+" vs. "+param1.capitalize())
-		subPlot=displayFig.add_subplot(111,xlabel=param0.capitalize(),ylabel=param1.capitalize(),title=self.getObservation(0).getAttributeByName("ticker")+": " + param0.capitalize() + " vs. " + param1.capitalize() + xRangeString)
+		displayFig.canvas.set_window_title(self.getObservation(0).getAttributeByName("ticker").upper()+": "+param0.capitalize()+" vs. "+param1.capitalize())
+		subPlot=displayFig.add_subplot(111,xlabel=param0.capitalize(),ylabel=param1.capitalize(),title=self.getObservation(0).getAttributeByName("ticker").upper()+": " + param0.capitalize() + " vs. " + param1.capitalize() + xRangeString)
 		subPlot.grid(False)
 		#Some statistics to calculate range extension
 		dateMin=date(xArray[0].year,xArray[0].month,1)
-		dateMax=date(xArray[len(xArray)-1].year,xArray[len(xArray)-1].month,31)
+		#get last day of month using calendar module
+		lastDay = calendar.monthrange(xArray[len(xArray)-1].year,xArray[len(xArray)-1].month)[1]
+
+		dateMax=date(xArray[len(xArray)-1].year,xArray[len(xArray)-1].month,lastDay)
 		extensionY=(max(yArray)-min(yArray))*.1
 		#print "EXTENSIONY:",extensionY
 		subPlot.set_xlim(dateMin,dateMax)

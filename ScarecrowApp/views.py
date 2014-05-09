@@ -51,9 +51,7 @@ def generate_image(request):
 def generate_jsondata(request,inTicker):
     startDate = request.GET['start'] #in the form of yyyy-mm-dd
     endDate = request.GET['end']
-    #change the / to -
-    startDate.replace('/','-')
-    endDate.replace('/','-')
+
     #URL request construction
     quandl_url="http://www.quandl.com/api/v1/datasets/WIKI/"+inTicker.upper()
     quandl_url += ".json?sort_order=asc&trim_start="+startDate

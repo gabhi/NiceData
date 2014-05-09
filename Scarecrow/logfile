@@ -262,3 +262,12 @@
 [09/May/2014 07:11:46] DEBUG [ScarecrowApp.lib.ScarecrowObjects:33] http://ichart.yahoo.com/table.csv?s=intc&a=4&b=1&c=2014&d=4&e=2&f=2014&g=d&ignore=.csv
 [09/May/2014 07:11:48] DEBUG [ScarecrowApp.lib.ScarecrowObjects:33] http://ichart.yahoo.com/table.csv?s=intc&a=4&b=1&c=2014&d=4&e=2&f=2014&g=d&ignore=.csv
 [09/May/2014 07:12:02] DEBUG [ScarecrowApp.lib.ScarecrowObjects:33] http://ichart.yahoo.com/table.csv?s=intc&a=1&b=3&c=2014&d=4&e=2&f=2014&g=d&ignore=.csv
+[09/May/2014 07:17:12] DEBUG [ScarecrowApp.views:18] index rendered.
+[09/May/2014 07:17:15] DEBUG [ScarecrowApp.lib.ScarecrowObjects:33] http://ichart.yahoo.com/table.csv?s=intc&a=1&b=3&c=2014&d=4&e=2&f=2014&g=d&ignore=.csv
+[09/May/2014 07:17:35] DEBUG [ScarecrowApp.lib.ScarecrowObjects:33] http://ichart.yahoo.com/table.csv?s=intc&a=1&b=3&c=2014&d=4&e=6&f=2014&g=d&ignore=.csv
+[09/May/2014 07:17:38] DEBUG [ScarecrowApp.lib.ScarecrowObjects:33] http://ichart.yahoo.com/table.csv?s=intc&a=0&b=13&c=2014&d=4&e=6&f=2014&g=d&ignore=.csv
+[09/May/2014 07:17:43] DEBUG [ScarecrowApp.lib.ScarecrowObjects:33] http://ichart.yahoo.com/table.csv?s=intc&a=0&b=13&c=2014&d=3&e=30&f=2014&g=d&ignore=.csv
+[09/May/2014 07:17:46] DEBUG [ScarecrowApp.lib.ScarecrowObjects:33] http://ichart.yahoo.com/table.csv?s=intc&a=0&b=1&c=2014&d=3&e=30&f=2014&g=d&ignore=.csv
+[09/May/2014 07:19:09] DEBUG [ScarecrowApp.views:18] index rendered.
+[09/May/2014 07:19:09] DEBUG [ScarecrowApp.views:18] index rendered.
+[09/May/2014 07:19:16] DEBUG [ScarecrowApp.lib.ScarecrowObjects:33] http://ichart.yahoo.com/table.csv?s=intc&a=4&b=5&c=2014&d=4&e=7&f=2014&g=d&ignore=.csv

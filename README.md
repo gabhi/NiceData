@@ -3,7 +3,9 @@ NiceData
 
 A small project for quickly creating financial graphics and analyses based on historical data. It pulls timeseries data from Yahoo! Finance, and builds charts using matplotlib. 
 
-This project is currently in development, and is not ready to be hosted. It aims to be much more than a chart creator.
+I decided to include an exact ticker data feature using jqGrid and the Quandl API. I'll provide the option to export to CSV shortly.
+
+This project is currently in development, and is not ready to be hosted.
 
 TODO
 =========

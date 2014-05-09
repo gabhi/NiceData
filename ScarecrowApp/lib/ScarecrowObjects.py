@@ -1,15 +1,16 @@
 from matplotlib import pyplot
 from matplotlib.dates import DateFormatter
 from mpltools import style
-import csv, urllib
-from datetime import date,datetime, timedelta
+import urllib
+from datetime import date,datetime
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import calendar
 import cStringIO
 #debugging tools
 import logging
 logger = logging.getLogger(__name__)
-
+from ScarecrowApp.models import Observation
+import pandas
 class ObservationSeries:
 
 	def __init__(self,tempArray=[]):
@@ -19,7 +20,21 @@ class ObservationSeries:
 	def fetchDataSeries(self,ticker=None,startDate=date(2009,1,1),endDate=date(2009,10,1), interval="d"):
 		#clear data set
 		self.dataSet = [];
-		#We check to see if data is not already stored here. If not, we pull from Yahoo
+		#We check to see if each data is not already stored here. If not, we pull from Yahoo
+		#We do not take into account holidays (we will pull if there is a holiday discrepancy)
+		numBusinessDays = len(pandas.bdate_range(startDate,endDate))
+		possibleDataSet = Observation.objects.filter(observationDate__gte=startDate,observationDate__lte=endDate,ticker=ticker)
+		#if the number of business days = the amount of data we have, use our data
+		print "POSSIBLE DATES: " + str(possibleDataSet.count())
+		print "BUSINESS DAYS: " + str(numBusinessDays)
+		if possibleDataSet.count() == numBusinessDays:
+			print "Necessary data already exists"
+			for retrievedObs in possibleDataSet:
+				
+				newSObs = SObservation(inDate=retrievedObs.observationDate,inTicker=retrievedObs.ticker,inOpen=retrievedObs.open,inHigh=retrievedObs.high,inLow=retrievedObs.low,inClose=retrievedObs.close,inVol=retrievedObs.vol,inAdjClose=retrievedObs.adjClose)
+				self.addObservation(newSObs)
+			return 
+
 		if(ticker == None):
 			print "ERROR: NO TICKER SPECIFIED"
 			return None
@@ -37,8 +52,28 @@ class ObservationSeries:
 			ds,open_,high,low,close,volume,adjclose=newData[lineNum].rstrip().split(',')
 			tempDate=datetime.strptime(ds,"%Y-%m-%d").date()
 			#print tempDate
-			self.addObservation(Observation(inDate=tempDate,inTicker=ticker,inOpen=float(open_),inHigh=float(high),inLow=float(low),inClose=float(close),inVol=float(volume),inAdjClose=float(adjclose)))
+			newSObs = SObservation(inDate=tempDate,inTicker=ticker,inOpen=float(open_),inHigh=float(high),inLow=float(low),inClose=float(close),inVol=float(volume),inAdjClose=float(adjclose))
+			self.addObservation(newSObs)
+			#Check if newObs exists, if not, create it
+			if Observation.objects.filter(observationDate=newSObs.date,ticker=newSObs.ticker).exists() == False:
+				#Create it
+				print "Does not exist, create it"
+				newObs = Observation()
+				newObs.created = datetime.today()
+				newObs.observationDate = newSObs.getAttributeByName("date")
+				newObs.ticker = newSObs.getAttributeByName("ticker")
+				newObs.open = newSObs.getAttributeByName("open")
+				newObs.high = newSObs.getAttributeByName("high")
+				newObs.low = newSObs.getAttributeByName("low")
+				newObs.close = newSObs.getAttributeByName("close")
+				newObs.vol = newSObs.getAttributeByName("volume")
+				newObs.adjClose = newSObs.getAttributeByName("adjClosePrice")
+				newObs.save()
+			else:
+				print "Item already exists, do not create"
 
+
+			#We save the data in our local database here
 	def addObservation(self,inObservation):
 		self.dataSet.append(inObservation)
 
@@ -163,9 +198,7 @@ class ObservationSeries:
 		encoded_img = sio.getvalue().encode('Base64')
 		return encoded_img
 
-
-
-class Observation:
+class SObservation:
 	def __init__(self,inDate="N/A",inTicker="N/A",inOpen=-1,inHigh=-1,inLow=-1,inClose=-1,inVol=-1,inAdjClose=-1):
 		self.date=inDate #a date object
 		self.ticker = inTicker

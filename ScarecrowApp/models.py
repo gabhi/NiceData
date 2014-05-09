@@ -17,3 +17,16 @@ class GeneratedFigure(models.Model):
 
 	def __unicode__(self): #returns string representation of object
 		return self.ticker + ": " + self.x_axis_title + " vs. " + self.y_axis_title
+
+class Observation(models.Model):
+	created = models.DateTimeField(editable=False)
+	observationDate = models.DateField()
+	ticker = models.CharField(max_length=10)
+	open = models.FloatField()
+	high = models.FloatField()
+	low = models.FloatField()
+	close = models.FloatField()
+	vol = models.FloatField()
+	adjClose = models.FloatField()
+	def __unicode__(self):
+		return self.ticker + ": " + str(self.close)

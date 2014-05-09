@@ -361,3 +361,5 @@
 [09/May/2014 20:22:58] DEBUG [ScarecrowApp.lib.ScarecrowObjects:49] http://ichart.yahoo.com/table.csv?s=intc&a=4&b=1&c=2014&d=4&e=5&f=2014&g=d&ignore=.csv
 [09/May/2014 20:23:43] DEBUG [ScarecrowApp.views:18] index rendered.
 [09/May/2014 20:23:44] DEBUG [ScarecrowApp.views:18] index rendered.
+[09/May/2014 20:28:03] DEBUG [ScarecrowApp.lib.ScarecrowObjects:48] http://ichart.yahoo.com/table.csv?s=intc&a=1&b=3&c=2014&d=3&e=16&f=2014&g=d&ignore=.csv
+[09/May/2014 20:28:12] DEBUG [ScarecrowApp.lib.ScarecrowObjects:48] http://ichart.yahoo.com/table.csv?s=intc&a=1&b=3&c=2014&d=3&e=16&f=2014&g=d&ignore=.csv

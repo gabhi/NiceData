@@ -6,6 +6,7 @@ from ScarecrowApp.lib.Main import Scarecrow
 from ScarecrowApp.models import GeneratedFigure
 from datetime import date,datetime
 import logging
+import json, urllib2
 logger = logging.getLogger(__name__)
 
 
@@ -35,20 +36,8 @@ def generate_image(request):
     if request.method == 'POST':
         ticker = request.POST['ticker']
 
-        # generate a matplotlib image, (I don't know how to do that)
-        '''
-        sio = cStringIO.StringIO() # use io.StringIO() in Python 3x
-        pyplot.savefig(sio, format="PNG")
-        encoded_img = sio.getvalue().encode('Base64') # On Python 3x, use base64.b64encode(sio.getvalue())
-
-       # return HttpResponse('<img src="data:image/png;base64,%s" />' %encoded_img)
-       '''
         start_date=datetime.strptime(request.POST['start_date'],'%Y/%m/%d').date()
         end_date=datetime.strptime(request.POST['end_date'],'%Y/%m/%d').date()
-
-        
-        #start_date = date(2009,1,1)
-        #end_date = date(2009,5,5)
 
         newScarecrow = Scarecrow(tickerIn=ticker,startIn=start_date,endIn=end_date,intervalIn='d')
         encoded_img = newScarecrow.currentSeries.plotSeriesCString()
@@ -58,3 +47,32 @@ def generate_image(request):
 
     else:
         return HttpResponse('not a post,nothing here',req_context)
+
+def generate_jsondata(request,inTicker):
+    startDate = request.GET['start'] #in the form of yyyy-mm-dd
+    endDate = request.GET['end']
+    #change the / to -
+    startDate.replace('/','-')
+    endDate.replace('/','-')
+    #URL request construction
+    quandl_url="http://www.quandl.com/api/v1/datasets/WIKI/"+inTicker.upper()
+    quandl_url += ".json?sort_order=asc&trim_start="+startDate
+    quandl_url += "&trim_end="+endDate+"&column=4&exclude_headers=true"
+    quandl_url += "&auth_token=fDgiy3MbwDyWNYSpXwun"
+    print quandl_url
+    data = json.load(urllib2.urlopen(quandl_url))
+    data = data['data'] #now a list of stock data
+    count = 1
+    rows = []
+    for row in data:
+        rows.append({"id":count,"cell":row})    
+        count+=1 
+    returnDict = {
+        "total":len(data),
+        "page":1,
+        "records":len(data),
+        "rows":rows
+    }
+
+    req_context = RequestContext(request,{'test':'lol'})
+    return HttpResponse(json.dumps(returnDict),req_context)

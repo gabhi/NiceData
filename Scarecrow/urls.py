@@ -12,10 +12,10 @@ urlpatterns = patterns('',
 
     #Return the dynamically created image
     #URL FORM: server.com/seriesid/result.png
-    url(r'^(?P<figure_id>\d+)/figure.png$', 'ScarecrowApp.views.getFigureImage',name='getFigureImage'),
+    #url(r'^(?P<figure_id>\d+)/figure.png$', 'ScarecrowApp.views.getFigureImage',name='getFigureImage'),
 
     #URL to serve created image on same page
     url(r'^generate-image/', 'ScarecrowApp.views.generate_image',name='generateImage'),
-
+    #URL to get JSON data from quandl, and parse it in a way that jqGrid can understand
+    url(r'^generate-data/(?P<inTicker>\w+).json$','ScarecrowApp.views.generate_jsondata',name='generatejsondata'),
 )
-	

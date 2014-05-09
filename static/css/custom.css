@@ -2,7 +2,10 @@
 $defaultBackgroundColor: #3A75C4;
 $defaultHighlightColor: #c0392b;
 
-
+.body{
+	margin-top: 28px;
+    margin-left: 0;
+}
 .navbar{
 	width:100%;
 	border:none !important;

@@ -1,6 +1,5 @@
 from matplotlib import pyplot
 from matplotlib.dates import DateFormatter
-from mpltools import style
 import urllib
 from datetime import date,datetime
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -104,7 +103,7 @@ class ObservationSeries:
 		returnList=[observation.getAttributeByName(nameOfAttr) for observation in self.dataSet]
 		return returnList
 	def plotSeries(self,param0="date",param1="close"): #plot using pyplot
-		style.use('ggplot') #using mpltools to make nice plots
+		#style.use('ggplot') #using mpltools to make nice plots
 		if len(self.dataSet)==0 and param1!="date": #Check to see if there is anything to plot and that y axis is NOT date
 			return -1
 		#otherwise plot the chosen parameter against time
@@ -149,7 +148,7 @@ class ObservationSeries:
 
 	#Returns a cstring encoded image
 	def plotSeriesCString(self,param0="date",param1="close"): #plot using pyplot
-		style.use('ggplot') #using mpltools to make nice plots
+		#style.use('ggplot') #using ggplot to make nice plots
 		if len(self.dataSet)==0 and param1!="date": #Check to see if there is anything to plot and that y axis is NOT date
 			return -1
 		#otherwise plot the chosen parameter against time

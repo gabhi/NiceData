@@ -5,3 +5,6 @@ Scarecrow.sublime-workspace
 /charts
 settings.py
 /Scarecrow/logfile
+/env/bin/
+/env/lib/
+/env/include/

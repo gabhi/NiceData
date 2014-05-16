@@ -18,8 +18,7 @@
             alert("Please fill in all required fields.");
             return false;
         }
-
-        //Else all is well, also update the jqGrid
+        //Else all is well, also update the jqGrid with new data
         var start = $('#start_date').val().split('/').join('-');
         var end = $('#end_date').val().split('/').join('-');
         var newUrl = "/generate-data/"+$('#tickerIn').val()+".json?start="+start+"&end="+end;
@@ -99,4 +98,9 @@ $("#tabulardata").jqGrid('navButtonAdd','#pager',{
        onClickButton : function () {
            $("#tabulardata").jqGrid('excelExport',{"url":null});
        }
+});
+//END TABULAR STOCK DATA
+//DEMO
+$('#demoBtn').click(function(){
+    alert('click');
 });

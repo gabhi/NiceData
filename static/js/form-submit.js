@@ -2,7 +2,8 @@
     $(document).ready(function() {
         var options = {
             target: '#ShowImage',
-            beforeSubmit: checkFormValues
+            beforeSubmit: checkFormValues,
+            success: showResponse
         };
         $("#GenImgForm").ajaxForm(options);
         $("#tabularsection").hide();
@@ -23,8 +24,15 @@
         var end = $('#end_date').val().split('/').join('-');
         var newUrl = "/generate-data/"+$('#tickerIn').val()+".json?start="+start+"&end="+end;
         $("#tabulardata").jqGrid().setGridParam({url : newUrl}).trigger("reloadGrid");
-        $("#tabularsection").show();
+        $("#tabularsection").fadeIn('slow');
         $('#NoImageText').hide();
+        $('#ShowImage').hide();
+        $('.imageFrame').css('outline','none');
+        return true;
+    }
+    function showResponse(responseText, statusText, xhr, $form)  {
+        //The image has been returned successfully
+        $('#ShowImage').fadeIn('slow');
         return true;
     }
 //END AJAX FORM REQUEST
@@ -68,8 +76,10 @@ $('#tabulardata').jqGrid({
     rowNum:10,
     rowList:[10,20,30,100,1000],
     pager:'#pager',
+    pgbuttons:false,
+    pgtext:null,
     sortname:'date',
-    viewrecords:true,
+    viewrecords:false,
     sortorder:'desc',
     caption:'Stock Closing Price'
 });
@@ -84,18 +94,9 @@ $('#tabulardata').jqGrid('navGrid','#pager',{
     viewrecords:false,
     loadtext: "Loading..."
 });
-
-/*
-$('#tabulardata').jqGrid({
-    datatype: 'local',
-    colNames: ['id', 'name'],
-    colModel: [
-        { name: 'id', index: 'id', width: 100 },
-        { name: 'name', index: 'name', width: 300 }
-    ],
-    rowNum: 9999,
-    sortname: 'name',
-    viewrecords: true,
-    sortorder: 'asc',
-    data: [{"id":"924c18a4-cad6-4b6a-97ef-f9ca61614530","name":"Pathway 1"},{"id":"54897f40-49ab-4abd-acac-6047006c7cc7","name":"Pathway 2"},{"id":"61542c48-102f-4d8e-ba9f-c24c64a20d28","name":"Pathway 3"},{"id":"c4ca9575-7353-4c18-b38a-33b383fcd8b2","name":"Pathway 4"}]
-});*/
+$("#tabulardata").jqGrid('navButtonAdd','#pager',{
+       caption:"Export to CSV",
+       onClickButton : function () {
+           $("#tabulardata").jqGrid('excelExport',{"url":null});
+       }
+});

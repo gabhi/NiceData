@@ -22,14 +22,10 @@
     final build -->
     <link href="{{STATIC_URL}}css/custom.css?{% now "U" %}" rel="stylesheet">
     <link href="{{STATIC_URL}}css/datepicker.css" rel="stylesheet">
-
     <!-- Custom fonts from Google fonts -->
     <link href='http://fonts.googleapis.com/css?family=Just+Another+Hand' rel='stylesheet' type='text/css'>
-    <!--Initial jQuery -->
-
 
 </head>
-
 <body>
     <!-- NAVBAR -->
     <nav class="navbar navbar-scarecrowCustom navbar-fixed-top" role="navigation">
@@ -56,20 +52,31 @@
 
     <!--  JUMBOTRON LANDING HEADER -->
     <div class="customTopBackground"></div>
-    <div class="jumbotron" style="padding=0px;">
-        
-        <h1>Graphs are usually ugly. </h1>
-        <p> Not these ones! Pretty looking graphs look great on a well designed PowerPoint. </p>
-        <a class="btn btn-primary btn-large scroll-link" href="#" data-id="use">Make something pretty &raquo;</a>
+    <div class="wholePage" >
+        <div class="row">
+            <div class="col-md-5">
+                <h1>Graphs are usually ugly.</h1>
+                <p>Try spicing up your next powerpoint with some NiceData.</p>
+                <a class="btn btn-primary btn-large scroll-link" href="#" data-id="use">Make something pretty &raquo;</a>
+            </div>
+            <div class="col-md-7">
+                <center>
+                    test
+                </center>
+
+            </div>
+        </div>
     </div>
 
     <!-- USE PAGE -->
-    <div class="container-fluid" style="background-color:#FFFFFF">
+    <div class="container-fluid customPageBackground">
+    <!--<div class="container-fluid" style="background-color:#FFFFFF">-->
+
         <div class="row-fluid">
             <section id="use">
             <div class="row-fluid">
                 <!-- IMAGE DISPLAY (LEFT PANEL) -->
-                <div class="col-md-8 imageFrame" style="background-color:#FFFFFF;height:700px">
+                <div class="col-md-8 imageFrame" style="" id="ImageFrame">
                         <center>
                         <div id="ShowImage" class="imageFrame"></div>
                         <div id="NoImageText" class="imageFrame"><h1 class="customText">
@@ -83,9 +90,10 @@
                             {% crispy form %}
                     </div>
                     <div class="row-fluid" id="tabularsection">
-                        <center> <h3> Tabular Data </h3> </center>
+                        <center> <h3> Tabular Data </h3> 
                         <table id="tabulardata"></table>
                         <div id="pager"></div>
+                        </center>
                     </div>
                 </div>
             </div>
@@ -109,15 +117,11 @@
     <script src="{{STATIC_URL}}js/jquery-ui-1.10.4.min.js"></script>
     <script src="{{STATIC_URL}}js/grid.locale-en.js"></script>
     <script src="{{STATIC_URL}}js/jquery.jqGrid.min.js"></script>
-
     <script src="{{STATIC_URL}}js/bootstrap.js"></script>
     <script src="{{STATIC_URL}}js/bootstrap-datepicker.js"></script>
     <script src="{{STATIC_URL}}js/parallax-scroll.js"></script>
     <script src="{{STATIC_URL}}js/jquery.form.js"></script>
     <script src="{{STATIC_URL}}js/form-submit.js"></script>
-
-
-
 
 </body>
 </html>

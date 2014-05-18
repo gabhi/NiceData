@@ -1,3 +1,5 @@
+//GLOBAL VARIABLES
+var lastQuery = {ticker:"",url:""};
 //AJAX FORM REQUEST
     $(document).ready(function() {
         var options = {
@@ -22,6 +24,8 @@
         var start = $('#start_date').val().split('/').join('-');
         var end = $('#end_date').val().split('/').join('-');
         var newUrl = "/generate-data/"+$('#tickerIn').val()+".json?start="+start+"&end="+end;
+        lastQuery.ticker = $('#tickerIn').val();
+        lastQuery.url = newUrl;
         $("#tabulardata").jqGrid().setGridParam({url : newUrl}).trigger("reloadGrid");
         $("#tabularsection").fadeIn('slow');
         $('#NoImageText').hide();
@@ -100,7 +104,13 @@ $("#tabulardata").jqGrid('navButtonAdd','#pager',{
        }
 });
 //END TABULAR STOCK DATA
-//DEMO
-$('#demoBtn').click(function(){
-    alert('click');
+//EXPORT TO CSV
+$('#exportBtn').click(function(){
+    alert(tickerIn);
+    if(lastQuery.url !== ""){
+        $("#tabulardata").jqGrid('excelExport',{"url":lastQuery.url});
+    }
+    else{
+        alert("Please perform a query first.");
+    }
 });

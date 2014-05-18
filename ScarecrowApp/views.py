@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseServerError
 from django.template import RequestContext
 
 from ScarecrowApp.lib.Main import Scarecrow
@@ -41,6 +41,10 @@ def generate_image(request):
 
         newScarecrow = Scarecrow(tickerIn=ticker,startIn=start_date,endIn=end_date,intervalIn='d')
         encoded_img = newScarecrow.currentSeries.plotSeriesCString()
+        print encoded_img
+        if(encoded_img == -1):
+            print "Django returning 427"
+            return HttpResponseServerError(status=427)
 
         #return HttpResponse(ticker,req_context)
         return HttpResponse('<img src="data:image/png;base64,%s" class="img-responsive" alt="Your Generated Figure"/>' %encoded_img,req_context)

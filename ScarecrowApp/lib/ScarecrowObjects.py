@@ -47,32 +47,36 @@ class ObservationSeries:
 		staticString="&ignore=.csv"
 		endUrl=base+ticker+fromDateString+toDateString+intervalString+staticString
 		logger.debug(endUrl)
+		print endUrl
 		newData=urllib.urlopen(endUrl).readlines()
 		newData.reverse() #Want earliest data first
-		for lineNum in xrange(0,len(newData)-1):
-			ds,open_,high,low,close,volume,adjclose=newData[lineNum].rstrip().split(',')
-			tempDate=datetime.strptime(ds,"%Y-%m-%d").date()
-			#print tempDate
-			newSObs = SObservation(inDate=tempDate,inTicker=ticker,inOpen=float(open_),inHigh=float(high),inLow=float(low),inClose=float(close),inVol=float(volume),inAdjClose=float(adjclose))
-			self.addObservation(newSObs)
-			#Check if newObs exists, if not, create it
-			if Observation.objects.filter(observationDate=newSObs.date,ticker=newSObs.ticker).exists() == False:
-				#Create it
-				print "Does not exist, create it"
-				newObs = Observation()
-				newObs.created = datetime.today()
-				newObs.observationDate = newSObs.getAttributeByName("date")
-				newObs.ticker = newSObs.getAttributeByName("ticker")
-				newObs.open = newSObs.getAttributeByName("open")
-				newObs.high = newSObs.getAttributeByName("high")
-				newObs.low = newSObs.getAttributeByName("low")
-				newObs.close = newSObs.getAttributeByName("close")
-				newObs.vol = newSObs.getAttributeByName("volume")
-				newObs.adjClose = newSObs.getAttributeByName("adjClosePrice")
-				newObs.save()
-			else:
-				print "Item already exists, do not create"
-
+		try:
+			for lineNum in xrange(0,len(newData)-1):
+				ds,open_,high,low,close,volume,adjclose=newData[lineNum].rstrip().split(',')
+				tempDate=datetime.strptime(ds,"%Y-%m-%d").date()
+				#print tempDate
+				newSObs = SObservation(inDate=tempDate,inTicker=ticker,inOpen=float(open_),inHigh=float(high),inLow=float(low),inClose=float(close),inVol=float(volume),inAdjClose=float(adjclose))
+				self.addObservation(newSObs)
+				#Check if newObs exists, if not, create it
+				if Observation.objects.filter(observationDate=newSObs.date,ticker=newSObs.ticker).exists() == False:
+					#Create it
+					print "Does not exist, create it"
+					newObs = Observation()
+					newObs.created = datetime.today()
+					newObs.observationDate = newSObs.getAttributeByName("date")
+					newObs.ticker = newSObs.getAttributeByName("ticker")
+					newObs.open = newSObs.getAttributeByName("open")
+					newObs.high = newSObs.getAttributeByName("high")
+					newObs.low = newSObs.getAttributeByName("low")
+					newObs.close = newSObs.getAttributeByName("close")
+					newObs.vol = newSObs.getAttributeByName("volume")
+					newObs.adjClose = newSObs.getAttributeByName("adjClosePrice")
+					newObs.save()
+				else:
+					print "Item already exists, do not create"
+		except ValueError:
+			print "DJANGO ERROR: No data exists for query."
+			return -1
 
 			#We save the data in our local database here
 	def addObservation(self,inObservation):

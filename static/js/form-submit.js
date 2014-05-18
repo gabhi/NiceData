@@ -5,17 +5,20 @@ var lastQuery = {ticker:"",url:""};
         var options = {
             target: '#ShowImage',
             beforeSubmit: checkFormValues,
-            success: showResponse
+            success: showResponse,
+            error: ajaxErrorHandler
         };
         $("#GenImgForm").ajaxForm(options);
         $("#tabularsection").hide();
+
         return false;
     });
 
-    //Intercept submit, hide text on submit
+    //VALIDATION & UI TRANSITION
     function checkFormValues(formData,jqForm,options){
         var formIsValid = true;
-        
+        //$('#errorDisplay').hide();
+
         if(($('#tickerIn').val().length === 0)||($('#start_date').val().length === 0) || ($('#end_date').val().length === 0) ){
             alert("Please fill in all required fields.");
             return false;
@@ -33,10 +36,18 @@ var lastQuery = {ticker:"",url:""};
         $('.imageFrame').css('outline','none');
         return true;
     }
+    //SUCCESS HANDLER
     function showResponse(responseText, statusText, xhr, $form)  {
-        //The image has been returned successfully
-        $('#ShowImage').fadeIn('slow');
+        $('#ShowImage').fadeIn('slow');//Show our image
         return true;
+    }
+    //ERROR HANDLER
+    function ajaxErrorHandler(request, status, error){
+        console.log("Error passed to jq.");
+        if(!$('.alert')[0]){
+            $('#ImageFrame').prepend('<div class="alert alert-danger fade in"><b>Error!</b> Invalid ticker or date range specified.<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
+            $('#NoImageText').fadeIn('slow');
+        }
     }
 //END AJAX FORM REQUEST
 //DATE PICKER 

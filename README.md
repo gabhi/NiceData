@@ -1,6 +1,6 @@
 [NiceData](http://glacial-peak-3884.herokuapp.com/ "Link to Demo")
 =========
-![alt tag](https://dl.dropboxusercontent.com/u/45206361/interface_mvp1.png)
+![alt tag](https://dl.dropboxusercontent.com/u/45206361/NiceData_Prototype.png)
 About
 =========
 A small project for quickly creating financial graphics and analyses based on historical data. It pulls timeseries data from Yahoo! Finance, and builds charts using matplotlib with custom styling. 

@@ -46,8 +46,10 @@ var lastQuery = {ticker:"",url:""};
         console.log("Error passed to jq.");
         if(!$('.alert')[0]){
             $('#ImageFrame').prepend('<div class="alert alert-danger fade in"><b>Error!</b> Invalid ticker or date range specified.<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>');
-            $('#NoImageText').fadeIn('slow');
         }
+        //Else there is already an error being displayed
+        $('#NoImageText').fadeIn('slow');
+
     }
 //END AJAX FORM REQUEST
 //DATE PICKER 

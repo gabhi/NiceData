@@ -1,6 +1,7 @@
 Scarecrow.sublime-project
 Scarecrow.sublime-workspace
 *.pyc
+*.codekit
 *.png
 /charts
 settings.py

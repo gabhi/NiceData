@@ -9,11 +9,11 @@ class ControlPanel(forms.Form):
 	end_date = forms.CharField(label="End Date",required=True)
 	helper = FormHelper()
 	helper.form_method = 'POST'
-
 	#This ID is intercepted in form-submit.js in the 'ajaxForm' call
 	helper.form_id = 'GenImgForm'
 	#The form calls a view named generate-image (routed via urls.py)
 	helper.form_action = "/generate-image/"
+	
 	#Define components of the form
 	component0=Field('ticker',css_class='input-xlarge',id='tickerIn')
 	component1=Field('start_date',css_class='input-xlarge',id='start_date')

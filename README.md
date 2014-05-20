@@ -3,7 +3,9 @@
 ![alt tag](https://dl.dropboxusercontent.com/u/45206361/NiceData_Prototype.png)
 About
 =========
-A project for quickly creating financial graphics and analyses based on historical data. It pulls timeseries data from Yahoo! Finance, and builds charts using matplotlib with custom styling. 
+I couldn't find a quick single-page web application to generate stock charts for me, so I made one.
+
+This is a project for quickly creating financial graphics and analyses based on historical data. It pulls timeseries data from Yahoo! Finance, and builds charts using matplotlib with custom styling. 
 
 Ticker data displayed using jqGrid and Quandl can be viewed on the side panel, with export feature to be implemented soon.
 
